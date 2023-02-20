@@ -6,8 +6,29 @@ class ToDoListClass:
           self.owner=owner
           self.last_edit_date=last_edit_date
 
+      def AddOnList(self, selectedlist):
+          selectedlist.append(input("Write: "))
+          print(selectedlist)
+          return selectedlist
+
+      def EditOnList(self, selectedlist):
+          print(selectedlist)
+          editedItem = input("Which item you wish to edit (type number): ")
+          selectedlist.remove(selectedlist[int(editedItem) - 1])
+          selectedlist.append(input("What you wish to rewrite: "))
+          print(selectedlist)
+          return selectedlist
+
+      def DeleteOnList(self, selectedlist):
+          print(selectedlist)
+          deletedItem = input("Which item you wish to delete (type number): ")
+          selectedlist.remove(selectedlist[int(deletedItem) - 1])
+          print(selectedlist)
+          return selectedlist
 
 
+
+      # GETTERS N SETTERS
       def get_title(self):
           return self.title
       def get_category(self):
