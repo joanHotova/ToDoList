@@ -1,10 +1,11 @@
 from datetime import datetime
-from ToDoList import ToDoList
+
 
 def AddOnList(selectedlist):
     selectedlist.append(input("Write: "))
     print(selectedlist)
     return selectedlist
+
 
 def EditOnList(selectedlist):
     print(selectedlist)
@@ -14,6 +15,7 @@ def EditOnList(selectedlist):
     print(selectedlist)
     return selectedlist
 
+
 def DeleteOnList(selectedlist):
     print(selectedlist)
     deletedItem = input("Which item you wish to delete (type number): ")
@@ -22,8 +24,7 @@ def DeleteOnList(selectedlist):
     return selectedlist
 
 
-
-def listActionFunction(action,selectedlist,listNumber,all_lists,all_listnames):
+def listActionFunction(action, selectedlist, listNumber, all_lists, all_listnames):
     while True:
         match action:
             case '1':
@@ -36,8 +37,8 @@ def listActionFunction(action,selectedlist,listNumber,all_lists,all_listnames):
                 DeleteOnList(selectedlist)
                 break
             case '4':
-                all_lists.remove(int(listNumber-1))
-                all_listnames.remove(int(listNumber-1))
+                all_lists.remove(int(listNumber - 1))
+                all_listnames.remove(int(listNumber - 1))
                 i = 1
                 for item in all_lists:
                     print(str(i) + ". " + all_listnames[i - 1].capitalize() + " - " + str(item))
@@ -46,49 +47,48 @@ def listActionFunction(action,selectedlist,listNumber,all_lists,all_listnames):
                 break
 
 
+def main():
+    from ToDoListClass import ToDoListClass
+    from datetime import datetime
+
+    all_lists = [["run 10km", "cook eggs", "write code"], ["onions", "tomatos", "cheese", "shampoo"]]
+    all_listnames = ["daily routine", "market"]
+
+    while True:
+        print("\nHello! Welcome to el Todo list!\n - Menu:")
+        print("1. Create new list\n2. Show lists\n3. Exit\n")
+        user_insert1 = input("Type the number of the action you want, please: ")
+
+        match user_insert1:
+            case '1':
+                title = input("Title: ").capitalize()
+                category = input("Category: ").capitalize()
+                owner = input("Owner: ").capitalize()
+                last_edit_date = datetime
+                todolist = []
+                input_string = input("Enter elements of a list separated by comma: ")
+                print("\n")
+                todolist = input_string.split(", ").capitalize()
+                print(todolist)
+                todolist_obj = ToDoListClass(title, category, todolist, owner, last_edit_date)
+                break
+            case '2':
+                if not all_lists:  # in case it is empty
+                    print("There is no available list.")
+                else:
+                    i = 1
+                    for item in all_lists:
+                        print(str(i) + ". " + all_listnames[i - 1].capitalize() + " - " + str(item))
+                        i = i + 1
+                    user_insert2 = input("Type the code of the list you want: ")
+                    print(all_listnames[int(user_insert2) - 1].capitalize() + " - " + str(
+                        all_lists[int(user_insert2) - 1]))
+                    print("1. Add\n2. Edit list item\n3. Delete list item\n4. Clean list\n5. Exit\n")
+                    action = input("Type the number of the action you want, please: ")
+                    listActionFunction(action, all_lists[int(user_insert2) - 1], user_insert2, all_lists, all_listnames)
+
+    print("\nThank you!")
 
 
-all_lists=[["run 10km","cook eggs","write code"],["onions","tomatos","cheese","shampoo"]]
-all_listnames=["daily routine","market"]
-
-import ToDoList
-
-while True:
-    print("\nHello! Welcome to el Todo list!\n - Menu:")
-    print("1. Create new list\n2. Show lists\n3. Exit\n")
-    user_insert1=input("Type the number of the action you want, please: ")
-
-    match user_insert1:
-        case '1':
-            title = input("Title: ")
-            category  = input("Category: ")
-            owner = input("Owner: ")
-            last_edit_date = datetime
-            todolist = []
-            input_string = input("Enter elements of a list separated by comma: ")
-            print("\n")
-            todolist = input_string.split(", ")
-            print(todolist)
-            ToDolist_Obj = ToDoList(title, category, todolist, owner, last_edit_date)
-            print(ToDolist_Obj)
-            break
-        case '2':
-            if not all_lists: #in case it is empty
-                print("There is no available list.")
-            else:
-                i = 1
-                for item in all_lists:
-                    print(str(i) + ". "+all_listnames[i-1].capitalize()+ " - " + str(item))
-                    i = i + 1
-                user_insert2=input("Type the code of the list you want: ")
-                print(all_listnames[int(user_insert2)-1].capitalize() + " - " +str(all_lists[int(user_insert2)-1]))
-                print("1. Add\n2. Edit list item\n3. Delete list item\n4. Clean list\n5. Exit\n")
-                action = input("Type the number of the action you want, please: ")
-                listActionFunction(action,all_lists[int(user_insert2)-1],user_insert2,all_lists,all_listnames)
-
-
-
-
-
-
-print("\nThank you!")
+if __name__ == "__main__":
+    main()
