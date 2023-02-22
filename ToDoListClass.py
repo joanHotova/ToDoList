@@ -6,26 +6,30 @@ class ToDoListClass:
           self.owner=owner
           self.last_edit_date=last_edit_date
 
-      def AddOnList(self, selectedlist):
+      def AddOnList(self, selectedlist,last_edit_date):
           selectedlist.append(input("Write: "))
+          print("\nAdded on " + str(last_edit_date.strftime("%x") + " " + last_edit_date.strftime("%X")))
           print(selectedlist)
           return selectedlist
 
-      def EditOnList(self, selectedlist):
+      def EditOnList(self, selectedlist,last_edit_date):
           print(selectedlist)
           editedItem = input("Which item you wish to edit (type number): ")
           selectedlist.remove(selectedlist[int(editedItem) - 1])
           selectedlist.append(input("What you wish to rewrite: "))
+          print("\nEdited on " + str(last_edit_date.strftime("%x") + " " + last_edit_date.strftime("%X")))
           print(selectedlist)
           return selectedlist
 
-      def DeleteOnList(self, selectedlist):
+      def DeleteOnList(self, selectedlist,last_edit_date):
           deletedItem = input("Which item you wish to delete (type number): ")
           selectedlist.remove(selectedlist[int(deletedItem) - 1])
+          print("\nDeleted on " + str(last_edit_date.strftime("%x") + " " + last_edit_date.strftime("%X")))
           return selectedlist
 
-      def CleanList(self, selectedObj,all_lists):
+      def CleanList(self, selectedObj,all_lists,last_edit_date):
           all_lists.remove(selectedObj)
+          print("Completed on " + str(last_edit_date.strftime("%x") + " " + last_edit_date.strftime("%X")))
           return all_lists
 
 
