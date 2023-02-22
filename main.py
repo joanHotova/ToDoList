@@ -15,7 +15,11 @@ def listActionFunction(action, selectedObj, listNumber, all_lists):
                 break
             case '5':
                 break
-
+def welcomeMenu():
+    print("\nHello! Welcome to el Todo list!\n - Menu:")
+    print("1. Create new list\n2. Show lists\n0. Exit\n")
+    user_insert1 = input("Type the number of the action you want, please: ")
+    return user_insert1
 
 def main():
     from ToDoListClass import ToDoListClass
@@ -25,9 +29,8 @@ def main():
                  ToDoListClass("SuperMarket","Outcomes",["onions", "tomatos", "cheese", "shampoo"],"Jo","")]
 
     while True:
-        print("\nHello! Welcome to el Todo list!\n - Menu:")
-        print("1. Create new list\n2. Show lists\n3. Exit\n")
-        user_insert1 = input("Type the number of the action you want, please: ")
+
+        user_insert1 = welcomeMenu()
 
         match user_insert1:
             case '1':
@@ -38,10 +41,12 @@ def main():
                 todolist = []
                 input_string = input("Enter elements of a list separated by comma: ")
                 print("\n")
-                todolist = input_string.split(", ").capitalize()
-                print(todolist)
+                for i in input_string.split(", "):
+                    todolist.append(i.capitalize())
+                # print(todolist)
                 todolist_obj = ToDoListClass(title, category, todolist, owner, last_edit_date)
-                break
+                print(todolist_obj.get_list())
+                all_lists.append(todolist_obj)
             case '2':
                 if not all_lists:  # in case it is empty
                     print("There is no available list.")
@@ -52,9 +57,13 @@ def main():
                         i = i + 1
                     user_insert2 = input("Type the number of the list you want: ")
                     print(all_lists[int(user_insert2)-1].get_title()+" - "+str(all_lists[int(user_insert2)-1].get_list()))
-                    print("\n1. Add\n2. Edit list item\n3. Delete list item\n4. Clean list\n5. Exit\n")
+                    print("\n1. Add\n2. Edit list item\n3. Delete list item\n4. Clean list\n5. Back\n0. Exit\n")
                     action = input("Type the number of the action you want, please: ")
                     listActionFunction(action, all_lists[int(user_insert2) - 1], user_insert2, all_lists)
+            case '5':
+                welcomeMenu()
+            case '0':
+                break
 
     print("\nThank you!")
 
