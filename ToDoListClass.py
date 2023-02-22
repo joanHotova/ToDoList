@@ -20,11 +20,13 @@ class ToDoListClass:
           return selectedlist
 
       def DeleteOnList(self, selectedlist):
-          print(selectedlist)
           deletedItem = input("Which item you wish to delete (type number): ")
           selectedlist.remove(selectedlist[int(deletedItem) - 1])
-          print(selectedlist)
           return selectedlist
+
+      def CleanList(self, selectedObj,all_lists):
+          all_lists.remove(selectedObj)
+          return all_lists
 
 
 

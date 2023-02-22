@@ -1,5 +1,5 @@
 
-def listActionFunction(action, selectedObj, listNumber, all_lists):
+def listActionFunction(action, selectedObj, all_lists):
     while True:
         match action:
             case '1':
@@ -12,6 +12,8 @@ def listActionFunction(action, selectedObj, listNumber, all_lists):
                 return selectedObj.DeleteOnList(selectedObj.todolist)
                 break
             case '4':
+                print("Cleaning "+selectedObj.get_title()+" list: "+str(selectedObj.todolist))
+                return selectedObj.CleanList(selectedObj,all_lists)
                 break
             case '5':
                 break
@@ -59,7 +61,7 @@ def main():
                     print(all_lists[int(user_insert2)-1].get_title()+" - "+str(all_lists[int(user_insert2)-1].get_list()))
                     print("\n1. Add\n2. Edit list item\n3. Delete list item\n4. Clean list\n5. Back\n0. Exit\n")
                     action = input("Type the number of the action you want, please: ")
-                    listActionFunction(action, all_lists[int(user_insert2) - 1], user_insert2, all_lists)
+                    listActionFunction(action, all_lists[int(user_insert2) - 1],  all_lists)
             case '5':
                 welcomeMenu()
             case '0':
