@@ -1,3 +1,9 @@
+import sys
+
+from BillsCategory import BillsCategory
+from WorkCategory import WorkCategory
+import datetime
+
 
 def listActionFunction(action, selectedObj, all_lists, last_edit_date):
     while True:
@@ -23,11 +29,30 @@ def welcomeMenu():
     user_insert1 = input("Type the number of the action you want, please: ")
     return user_insert1
 
+def classMatching(name):
+
+    match name:
+        case 'Bills':
+            deadline=input("Deadline (m/d/y): ")
+            amount = input("Amount: ")
+            return BillsCategory(name,deadline,amount)
+        case 'Work':
+            deadline=input("Deadline (m/d/y): ")
+            return WorkCategory(name,deadline) #datetime.datetime.strptime(deadline, '%m/%d/%y')
+        case 'Gym':
+            return 'B'
+        case 'Shopping':
+            return 'B'
+        case 'Plans':
+            return 'C'
+        case 'Fun':
+            return 'C'
+
 def main():
     from ToDoListClass import ToDoListClass
-    import datetime
+    from Category import Category
 
-    all_lists = [ToDoListClass("Fitness","Life",["run","squat","v ups"],"Jo",datetime.datetime.strptime("09/19/10 13:55:26", '%m/%d/%y %H:%M:%S')),
+    all_lists = [ToDoListClass("Fitness","Gym",["run","squat","v ups"],"Jo",datetime.datetime.strptime("09/19/10 13:55:26", '%m/%d/%y %H:%M:%S')),
                  ToDoListClass("SuperMarket","Shopping",["onions", "tomatos", "cheese", "shampoo"],"Jo",datetime.datetime.strptime("05/03/17 10:23:06", '%m/%d/%y %H:%M:%S'))]
 
     while True:
@@ -37,7 +62,7 @@ def main():
         match user_insert1:
             case '1':
                 title = input("Title: ").capitalize()
-                category = input("Category: ").capitalize()
+                categoryObj=Category(input("Category: ").capitalize())
                 owner = input("Owner: ").capitalize()
                 last_edit_date = datetime.datetime.now()
                 todolist = []
@@ -45,9 +70,16 @@ def main():
                 print("\n")
                 for i in input_string.split(", "):
                     todolist.append(i.capitalize())
-                todolist_obj = ToDoListClass(title, category, todolist, owner, last_edit_date)
+                    print(i.capitalize())
+                    classMatching(categoryObj.get_name())
+                todolist_obj = ToDoListClass("\n"+title,categoryObj.get_name() , todolist, owner, last_edit_date)
+
+                #print(classMatching(categoryObj.get_name()).get_amount())
+
+
+
                 print("\nCreated on " + str(last_edit_date.strftime("%x") + " " + last_edit_date.strftime("%X")))
-                print(todolist_obj.get_list())
+                print(str(todolist_obj.get_title())+" - "+str(todolist_obj.get_list()))
                 all_lists.append(todolist_obj)
             case '2':
                 if not all_lists:  # in case it is empty
@@ -60,7 +92,7 @@ def main():
                         i = i + 1
                     user_insert2 = input("Type the number of the list you want: ")
                     print(all_lists[int(user_insert2)-1].get_title()+" - "+str(all_lists[int(user_insert2)-1].get_list()))
-                    print("\n1. Add\n2. Edit list item\n3. Delete list item\n4. Clean list\n5. Back\n0. Exit\n")
+                    print("\n1. Add\n2. Edit list item\n3. Delete list item\n4. Clean list\n5. Back to Menu\n0. Exit\n")
                     action = input("Type the number of the action you want, please: ")
                     listActionFunction(action, all_lists[int(user_insert2) - 1],  all_lists,last_edit_date)
             case '5':
