@@ -1,6 +1,7 @@
 import sys
 
 from BillsCategory import BillsCategory
+from GymCategory import GymCategory
 from WorkCategory import WorkCategory
 import datetime
 
@@ -40,7 +41,9 @@ def classMatching(name):
             deadline=input("Deadline (m/d/y): ")
             return WorkCategory(name,deadline) #datetime.datetime.strptime(deadline, '%m/%d/%y')
         case 'Gym':
-            return 'B'
+            timecap = input("Time Cap (mins): ")
+            cals=input("Calories goal: ")
+            return GymCategory( name, timecap, cals)
         case 'Shopping':
             return 'B'
         case 'Plans':
