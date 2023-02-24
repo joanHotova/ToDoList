@@ -77,7 +77,7 @@ def main():
                     classMatching(categoryObj.get_name())
                 todolist_obj = ToDoListClass("\n"+title,categoryObj.get_name() , todolist, owner, last_edit_date)
 
-                #print(classMatching(categoryObj.get_name()).get_amount())
+                #print(categoryObj.priority(categoryObj.get_name()))
 
 
 
