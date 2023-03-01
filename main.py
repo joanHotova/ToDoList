@@ -1,7 +1,7 @@
-import sys
-
+from Category import Category
 from BillsCategory import BillsCategory
 from GymCategory import GymCategory
+from ShoppingCategory import ShoppingCategory
 from WorkCategory import WorkCategory
 import datetime
 
@@ -45,11 +45,12 @@ def classMatching(name):
             cals=input("Calories goal: ")
             return GymCategory( name, timecap, cals)
         case 'Shopping':
-            return 'B'
+            budget=input("Budget limit: ")
+            return ShoppingCategory(name, budget)
         case 'Plans':
-            return 'C'
+            return Category(name)
         case 'Fun':
-            return 'C'
+            return Category(name)
 
 def main():
     from ToDoListClass import ToDoListClass
@@ -75,7 +76,7 @@ def main():
                     todolist.append(i.capitalize())
                     print(i.capitalize())
                     classMatching(categoryObj.get_name())
-                todolist_obj = ToDoListClass("\n"+title,categoryObj.get_name() , todolist, owner, last_edit_date)
+                todolist_obj = ToDoListClass(title,categoryObj.get_name() , todolist, owner, last_edit_date)
 
                 #print(categoryObj.priority(categoryObj.get_name()))
 
