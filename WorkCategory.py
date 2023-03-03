@@ -11,5 +11,5 @@ class WorkCategory(Category):
     def get_deadline(self):
         return self.deadline
     def set_deadline(self, deadline):
-        self.deadline = deadline #super().features(self.name)#.split("&")
+        self.deadline = deadline
 

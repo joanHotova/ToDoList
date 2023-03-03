@@ -11,7 +11,7 @@ def listActionFunction(action, selectedObj, all_lists, last_edit_date):
     while True:
         match action:
             case '1':
-                return selectedObj.AddOnList(selectedObj.todolist,last_edit_date)
+                return selectedObj.AddOnList(selectedObj.todolist,last_edit_date, selectedObj.get_category())
                 break
             case '2':
                 return selectedObj.EditOnList(selectedObj.todolist,last_edit_date)
@@ -30,22 +30,6 @@ def welcomeMenu():
     print("1. Create new list\n2. Show lists\n0. Exit\n")
     user_insert1 = input("Type the number of the action you want, please: ")
     return user_insert1
-
-
-# def checkTableExists(connection, tablename):
-#     dbcur = connection.cursor()
-#     dbcur.execute("""
-#         SELECT COUNT(*)
-#         FROM information_schema.tables
-#         WHERE table_name = '{0}'
-#         """.format(tablename.replace('\'', '\'\'')))
-#     if dbcur.fetchone()[0] == 1:
-#         dbcur.close()
-#         return True
-#
-#     dbcur.close()
-#     return False
-
 
 def classMatching(name,i):
 

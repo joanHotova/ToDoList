@@ -1,3 +1,58 @@
+import mysql
+import mysql.connector
+from mysql.connector import Error
+def attributesFunction(category):  # ,deadline,amount,timecap,cals,budget
+    match category:
+        case 'Bills':
+            deadline = input("Deadline (m/d/y): ")
+            amount = input("Amount: ")
+            return deadline, amount
+        case 'Work':
+            deadline = input("Deadline (m/d/y): ")
+            return deadline
+        case 'Gym':
+            timecap = input("Time Cap (mins): ")
+            cals = input("Calories goal: ")
+            return timecap, cals
+        case 'Shopping':
+            budget = input("Budget limit: ")
+            return budget
+
+def DBconnectionInsert(insertQuery):
+    try:
+        connection = mysql.connector.connect(host='localhost',
+                                             database='ToDoDB',
+                                             user='root',
+                                             password='mysqlrootpass123!@#')
+        if connection.is_connected():
+            db_Info = connection.get_server_info()
+            #print("Connected to MySQL Server version ", db_Info)
+            cursor = connection.cursor()
+            cursor.execute("select database();")
+            record = cursor.fetchone()
+            #print("You're connected to database: ", record)
+
+            cursor.execute(insertQuery)
+            connection.commit()
+            # cursor.execute('SELECT * FROM WorkCategory')
+            # for i in cursor:
+            #     print(i)
+
+    except Error as e:
+        if e.errno==1050: #table exists
+            cursor.execute(insertQuery)
+            connection.commit()
+            # cursor.execute('SELECT * FROM WorkCategory')
+            # for i in cursor:
+            #     print(i)
+        else: #other errors
+            print("Error while connecting to MySQL", e)
+    finally:
+        if connection.is_connected():
+            cursor.close()
+            connection.close()
+            # print("MySQL connection is closed")
+
 class ToDoListClass:
     def __init__(self, title, category, todolist, owner, last_edit_date):
         self.title = title
@@ -6,8 +61,25 @@ class ToDoListClass:
         self.owner = owner
         self.last_edit_date = last_edit_date
 
-    def AddOnList(self, selectedlist, last_edit_date):
-        selectedlist.append(input("Write: "))
+
+
+
+    def AddOnList(self, selectedlist, last_edit_date, category):
+        addedItem=input("Write: ")
+        selectedlist.append(addedItem)
+        match category:
+            case 'Bills':
+                deadline, amount=attributesFunction(str(category))
+                insertQuery = "INSERT INTO BillsCategory(name, deadline,amount) VALUES ('" + addedItem + "','" + deadline + "','"+ amount +"')"
+                DBconnectionInsert(insertQuery)
+            case 'Work':
+                deadline=attributesFunction(str(category))
+                insertQuery = "INSERT INTO WorkCategory(name, deadline) VALUES ('" + addedItem + "','" + deadline + "')"
+                DBconnectionInsert(insertQuery)
+            case 'Gym':
+                timecap, cals=attributesFunction(str(category))
+            case 'Shopping':
+                budget=attributesFunction(str(category))
         print("\nAdded on " + str(last_edit_date.strftime("%x") + " " + last_edit_date.strftime("%X")))
         print(selectedlist)
         return selectedlist
