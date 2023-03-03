@@ -51,13 +51,25 @@ def classMatching(name,i):
         case 'Gym':
             timecap = input("Time Cap (mins): ")
             cals=input("Calories goal: ")
+            createQuery = "CREATE TABLE GymCategory(name varchar(20)  NOT NULL, timecap int NOT NULL, cals int NOT NULL);"
+            insertQuery = "INSERT INTO GymCategory(name,timecap, cals) VALUES ('" + i + "','" + timecap + "','" + cals + "')"
+            DBconnection(createQuery, insertQuery)
             return GymCategory( name, timecap, cals)
         case 'Shopping':
             budget=input("Budget limit: ")
+            createQuery = "CREATE TABLE ShoppingCategory(name varchar(20)  NOT NULL, budget int NOT NULL);"
+            insertQuery = "INSERT INTO ShoppingCategory(name, budget) VALUES ('"+i+"','"+budget+"')"
+            DBconnection(createQuery, insertQuery)
             return ShoppingCategory(name, budget)
         case 'Plans':
+            createQuery = "CREATE TABLE PlansCategory(name varchar(20)  NOT NULL);"
+            insertQuery = "INSERT INTO PlansCategory(name) VALUES ('" + i + "')"
+            DBconnection(createQuery, insertQuery)
             return Category(name)
         case 'Fun':
+            createQuery = "CREATE TABLE FunCategory(name varchar(20)  NOT NULL);"
+            insertQuery = "INSERT INTO FunCategory(name) VALUES ('" + i + "')"
+            DBconnection(createQuery, insertQuery)
             return Category(name)
 
 
