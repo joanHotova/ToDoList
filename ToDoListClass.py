@@ -78,8 +78,13 @@ class ToDoListClass:
                 DBconnectionInsert(insertQuery)
             case 'Gym':
                 timecap, cals=attributesFunction(str(category))
+                insertQuery = "INSERT INTO GymCategory(name,timecap, cals) VALUES ('" + addedItem + "','" + timecap + "','" + cals + "')"
+                DBconnectionInsert(insertQuery)
             case 'Shopping':
                 budget=attributesFunction(str(category))
+                insertQuery = "INSERT INTO ShoppingCategory(name, budget) VALUES ('"+addedItem+"','"+budget+"')"
+                DBconnectionInsert(insertQuery)
+
         print("\nAdded on " + str(last_edit_date.strftime("%x") + " " + last_edit_date.strftime("%X")))
         print(selectedlist)
         return selectedlist
