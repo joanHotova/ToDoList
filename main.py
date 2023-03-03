@@ -4,7 +4,8 @@ from GymCategory import GymCategory
 from ShoppingCategory import ShoppingCategory
 from WorkCategory import WorkCategory
 import datetime
-
+import mysql.connector
+from mysql.connector import Error
 
 def listActionFunction(action, selectedObj, all_lists, last_edit_date):
     while True:
@@ -30,16 +31,39 @@ def welcomeMenu():
     user_insert1 = input("Type the number of the action you want, please: ")
     return user_insert1
 
-def classMatching(name):
+
+# def checkTableExists(connection, tablename):
+#     dbcur = connection.cursor()
+#     dbcur.execute("""
+#         SELECT COUNT(*)
+#         FROM information_schema.tables
+#         WHERE table_name = '{0}'
+#         """.format(tablename.replace('\'', '\'\'')))
+#     if dbcur.fetchone()[0] == 1:
+#         dbcur.close()
+#         return True
+#
+#     dbcur.close()
+#     return False
+
+
+def classMatching(name,i):
 
     match name:
         case 'Bills':
             deadline=input("Deadline (m/d/y): ")
             amount = input("Amount: ")
+            createQuery = "CREATE TABLE BillsCategory(name varchar(20)  NOT NULL, deadline varchar(20) NOT NULL, amount int NOT NULL);"
+            insertQuery = "INSERT INTO BillsCategory(name, deadline,amount) VALUES ('" + i + "','" + deadline + "','"+ amount +"')"
+            DBconnection(createQuery, insertQuery)
             return BillsCategory(name,deadline,amount)
         case 'Work':
-            deadline=input("Deadline (m/d/y): ")
+            deadline = input("Deadline (m/d/y): ")
+            createQuery = "CREATE TABLE WorkCategory(name varchar(20)  NOT NULL, deadline varchar(20)   NOT NULL);"
+            insertQuery = "INSERT INTO WorkCategory(name, deadline) VALUES ('"+i+"','"+deadline+"')"
+            DBconnection(createQuery,insertQuery)
             return WorkCategory(name,deadline) #datetime.datetime.strptime(deadline, '%m/%d/%y')
+
         case 'Gym':
             timecap = input("Time Cap (mins): ")
             cals=input("Calories goal: ")
@@ -52,12 +76,60 @@ def classMatching(name):
         case 'Fun':
             return Category(name)
 
+
+def DBconnection(createQuery,insertQuery):
+    try:
+        connection = mysql.connector.connect(host='localhost',
+                                             database='ToDoDB',
+                                             user='root',
+                                             password='mysqlrootpass123!@#')
+        if connection.is_connected():
+            db_Info = connection.get_server_info()
+            #print("Connected to MySQL Server version ", db_Info)
+            cursor = connection.cursor()
+            cursor.execute("select database();")
+            record = cursor.fetchone()
+            #print("You're connected to database: ", record)
+            cursor.execute(createQuery)
+            connection.commit()
+            cursor.execute(insertQuery)
+            connection.commit()
+            # cursor.execute('SELECT * FROM WorkCategory')
+            # for i in cursor:
+            #     print(i)
+
+    except Error as e:
+        if e.errno==1146: #table does not exist
+            cursor.execute(createQuery)
+            connection.commit()
+            cursor.execute(insertQuery)
+            connection.commit()
+            # cursor.execute('SELECT * FROM WorkCategory')
+            # for i in cursor:
+            #     print(i)
+        elif e.errno==1050: #table exists
+            cursor.execute(insertQuery)
+            connection.commit()
+            # cursor.execute('SELECT * FROM WorkCategory')
+            # for i in cursor:
+            #     print(i)
+        else: #other errors
+            print("Error while connecting to MySQL", e)
+    finally:
+        if connection.is_connected():
+            cursor.close()
+            connection.close()
+            # print("MySQL connection is closed")
+
+
 def main():
     from ToDoListClass import ToDoListClass
     from Category import Category
 
     all_lists = [ToDoListClass("Fitness","Gym",["run","squat","v ups"],"Jo",datetime.datetime.strptime("09/19/10 13:55:26", '%m/%d/%y %H:%M:%S')),
                  ToDoListClass("SuperMarket","Shopping",["onions", "tomatos", "cheese", "shampoo"],"Jo",datetime.datetime.strptime("05/03/17 10:23:06", '%m/%d/%y %H:%M:%S'))]
+
+
 
     while True:
 
@@ -75,7 +147,7 @@ def main():
                 for i in input_string.split(", "):
                     todolist.append(i.capitalize())
                     print(i.capitalize())
-                    classMatching(categoryObj.get_name())
+                    classMatching(categoryObj.get_name(),i)
                 todolist_obj = ToDoListClass(title,categoryObj.get_name() , todolist, owner, last_edit_date)
 
                 #print(categoryObj.priority(categoryObj.get_name()))
