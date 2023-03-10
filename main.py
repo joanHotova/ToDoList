@@ -14,7 +14,7 @@ def listActionFunction(action, selectedObj, all_lists, last_edit_date):
                 return selectedObj.AddOnList(selectedObj.todolist,last_edit_date, selectedObj.get_category())
                 break
             case '2':
-                return selectedObj.EditOnList(selectedObj.todolist,last_edit_date)
+                return selectedObj.EditOnList(selectedObj.todolist,last_edit_date, selectedObj.get_category())
                 break
             case '3':
                 return selectedObj.DeleteOnList(selectedObj.todolist,last_edit_date, selectedObj.get_category())

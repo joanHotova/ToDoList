@@ -53,8 +53,7 @@ def DBconnectionInsert(insertQuery):
             connection.close()
             # print("MySQL connection is closed")
 
-
-def DBconnectionDelete(deleteQuery):
+def DBconnectionQueriesExec(deleteQuery):
     try:
         connection = mysql.connector.connect(host='localhost',
                                              database='ToDoDB',
@@ -81,7 +80,6 @@ def DBconnectionDelete(deleteQuery):
             cursor.close()
             connection.close()
             # print("MySQL connection is closed")
-
 
 def DBconnectionSelect(selectQuery):
     try:
@@ -150,11 +148,39 @@ class ToDoListClass:
         print(selectedlist)
         return selectedlist
 
-    def EditOnList(self, selectedlist, last_edit_date):
+    def EditOnList(self, selectedlist, last_edit_date,category):
         print(selectedlist)
         editedItem = input("Which item you wish to edit (type number): ")
-        selectedlist.remove(selectedlist[int(editedItem) - 1])
-        selectedlist.append(input("What you wish to rewrite: "))
+        t1=str(selectedlist[int(editedItem) - 1])
+        selectedlist.remove(t1)
+        t2=input("What you wish to rewrite: ")
+        selectedlist.append(t2)
+        match category:
+            case 'Bills':
+                selectQuery = "select deadline from BillsCategory where name='" + t1 + "'"
+                selectedDeadline = DBconnectionSelect(selectQuery)
+                selectQuery = "select amount from BillsCategory where name='" + t1 + "'"
+                selectedAmount = DBconnectionSelect(selectQuery)
+                updateQuery = "UPDATE BillsCategory SET Name='" + t2 + "' WHERE deadline = '" + selectedDeadline[0] + "' and name='" + t1 + "' and amount='" + str(selectedAmount[0]) + "'"
+                DBconnectionQueriesExec(updateQuery)
+            case 'Work':
+                selectQuery = "select deadline from WorkCategory where name='" + t1 + "'"
+                selectedDeadline = DBconnectionSelect(selectQuery)
+                updateQuery = "UPDATE WorkCategory SET Name='" + t2 + "' WHERE deadline = '" + selectedDeadline[0] + "' and name='" + t1 + "'"
+                DBconnectionQueriesExec(updateQuery)
+            case 'Gym':
+                selectQuery = "select timecap from GymCategory where name='" + t1 + "'"
+                selectedTimeCap = DBconnectionSelect(selectQuery)
+                selectQuery = "select cals from GymCategory where name='" + t1 + "'"
+                selectedCals = DBconnectionSelect(selectQuery)
+                updateQuery = "UPDATE GymCategory SET Name='" + t2 + "' WHERE timecap = '" + str(selectedTimeCap[0]) + "' and name='" + t1 + "' and cals='" + str(selectedCals[0]) + "'"
+                DBconnectionQueriesExec(updateQuery)
+            case 'Shopping':
+                selectQuery = "select budget from ShoppingCategory where name='" + t1 + "'"
+                selectedBudget = DBconnectionSelect(selectQuery)
+                updateQuery = "UPDATE ShoppingCategory SET Name='" + t2 + "' WHERE budget = '" + str(selectedBudget[0]) + "' and name='"+t1+"'"
+                DBconnectionQueriesExec(updateQuery)
+
         print("\nEdited on " + str(last_edit_date.strftime("%x") + " " + last_edit_date.strftime("%X")))
         print(selectedlist)
         return selectedlist
@@ -169,26 +195,26 @@ class ToDoListClass:
                 selectQuery = "select deadline from WorkCategory where name='"+t1+"'"
                 selectedDeadline = DBconnectionSelect(selectQuery)
                 deleteQuery = "DELETE FROM WorkCategory WHERE deadline = '"+selectedDeadline[0]+"' and name='"+t1+"'"
-                DBconnectionDelete(deleteQuery)
+                DBconnectionQueriesExec(deleteQuery)
             case 'Bills':
                 selectQuery = "select deadline from BillsCategory where name='" + t1 + "'"
                 selectedDeadline = DBconnectionSelect(selectQuery)
                 selectQuery = "select amount from BillsCategory where name='" + t1 + "'"
                 selectedAmount = DBconnectionSelect(selectQuery)
                 deleteQuery = "DELETE FROM BillsCategory WHERE deadline = '" + selectedDeadline[0] + "' and name='" + t1 + "' and amount='"+str(selectedAmount[0])+"'"
-                DBconnectionDelete(deleteQuery)
+                DBconnectionQueriesExec(deleteQuery)
             case 'Gym':
                 selectQuery = "select timecap from GymCategory where name='" + t1 + "'"
                 selectedTimeCap = DBconnectionSelect(selectQuery)
                 selectQuery = "select cals from GymCategory where name='" + t1 + "'"
                 selectedCals = DBconnectionSelect(selectQuery)
                 deleteQuery = "DELETE FROM GymCategory WHERE timecap = '" + str(selectedTimeCap[0]) + "' and name='" + t1 + "' and cals='" + str(selectedCals[0]) + "'"
-                DBconnectionDelete(deleteQuery)
+                DBconnectionQueriesExec(deleteQuery)
             case 'Shopping':
                 selectQuery = "select budget from ShoppingCategory where name='" + t1 + "'"
                 selectedBudget = DBconnectionSelect(selectQuery)
                 deleteQuery = "DELETE FROM ShoppingCategory WHERE budget = '" + str(selectedBudget[0]) + "' and name='"+t1+"'"
-                DBconnectionDelete(deleteQuery)
+                DBconnectionQueriesExec(deleteQuery)
 
         print("\nDeleted on " + str(last_edit_date.strftime("%x") + " " + last_edit_date.strftime("%X")))
         return selectedlist
@@ -197,7 +223,7 @@ class ToDoListClass:
         all_lists.remove(selectedObj)
         tableName=str(category+"Category")
         clearQuery = "drop table "+tableName
-        DBconnectionDelete(clearQuery)
+        DBconnectionQueriesExec(clearQuery)
         print("Completed on " + str(last_edit_date.strftime("%x") + " " + last_edit_date.strftime("%X")))
         return all_lists
 
