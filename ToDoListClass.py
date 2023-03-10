@@ -121,8 +121,6 @@ class ToDoListClass:
         self.last_edit_date = last_edit_date
 
 
-
-
     def AddOnList(self, selectedlist, last_edit_date, category):
         addedItem=input("Write: ")
         selectedlist.append(addedItem)
@@ -142,6 +140,10 @@ class ToDoListClass:
             case 'Shopping':
                 budget=attributesFunction(str(category))
                 insertQuery = "INSERT INTO ShoppingCategory(name, budget) VALUES ('"+addedItem+"','"+budget+"')"
+                DBconnectionInsert(insertQuery)
+            case _:
+                tableName = str(category + "Category")
+                insertQuery = "INSERT INTO "+tableName+"(name) VALUES ('"+addedItem+"')"
                 DBconnectionInsert(insertQuery)
 
         print("\nAdded on " + str(last_edit_date.strftime("%x") + " " + last_edit_date.strftime("%X")))
@@ -180,7 +182,10 @@ class ToDoListClass:
                 selectedBudget = DBconnectionSelect(selectQuery)
                 updateQuery = "UPDATE ShoppingCategory SET Name='" + t2 + "' WHERE budget = '" + str(selectedBudget[0]) + "' and name='"+t1+"'"
                 DBconnectionQueriesExec(updateQuery)
-
+            case _:
+                tableName = str(category + "Category")
+                updateQuery = "UPDATE " + tableName + " SET Name='" + t2 + "' WHERE name='" + t1 + "'"
+                DBconnectionQueriesExec(updateQuery)
         print("\nEdited on " + str(last_edit_date.strftime("%x") + " " + last_edit_date.strftime("%X")))
         print(selectedlist)
         return selectedlist
@@ -215,6 +220,10 @@ class ToDoListClass:
                 selectedBudget = DBconnectionSelect(selectQuery)
                 deleteQuery = "DELETE FROM ShoppingCategory WHERE budget = '" + str(selectedBudget[0]) + "' and name='"+t1+"'"
                 DBconnectionQueriesExec(deleteQuery)
+            case _:
+                tableName = str(category + "Category")
+                deleteQuery = "DELETE FROM " + tableName + " WHERE  name='" + t1 + "'"
+                DBconnectionQueriesExec(deleteQuery)
 
         print("\nDeleted on " + str(last_edit_date.strftime("%x") + " " + last_edit_date.strftime("%X")))
         return selectedlist
@@ -226,6 +235,7 @@ class ToDoListClass:
         DBconnectionQueriesExec(clearQuery)
         print("Completed on " + str(last_edit_date.strftime("%x") + " " + last_edit_date.strftime("%X")))
         return all_lists
+
 
     # GETTERS N SETTERS
     def get_title(self):
