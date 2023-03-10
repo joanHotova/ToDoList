@@ -17,7 +17,7 @@ def listActionFunction(action, selectedObj, all_lists, last_edit_date):
                 return selectedObj.EditOnList(selectedObj.todolist,last_edit_date)
                 break
             case '3':
-                return selectedObj.DeleteOnList(selectedObj.todolist,last_edit_date)
+                return selectedObj.DeleteOnList(selectedObj.todolist,last_edit_date, selectedObj.get_category())
                 break
             case '4':
                 print("\nCleaning "+selectedObj.get_title()+" list: "+str(selectedObj.todolist))
@@ -33,6 +33,7 @@ def welcomeMenu():
 
 def classMatching(name,i):
 
+
     match name:
         case 'Bills':
             deadline=input("Deadline (m/d/y): ")
@@ -43,8 +44,8 @@ def classMatching(name,i):
             return BillsCategory(name,deadline,amount)
         case 'Work':
             deadline = input("Deadline (m/d/y): ")
-            createQuery = "CREATE TABLE WorkCategory(name varchar(20)  NOT NULL, deadline varchar(20)   NOT NULL);"
-            insertQuery = "INSERT INTO WorkCategory(name, deadline) VALUES ('"+i+"','"+deadline+"')"
+            createQuery = "CREATE TABLE WorkCategory( name varchar(20)  NOT NULL, deadline varchar(20)   NOT NULL);"
+            insertQuery = "INSERT INTO WorkCategory( name, deadline) VALUES ('"+i+"','"+deadline+"')"
             DBconnection(createQuery,insertQuery)
             return WorkCategory(name,deadline) #datetime.datetime.strptime(deadline, '%m/%d/%y')
 
