@@ -193,8 +193,11 @@ class ToDoListClass:
         print("\nDeleted on " + str(last_edit_date.strftime("%x") + " " + last_edit_date.strftime("%X")))
         return selectedlist
 
-    def CleanList(self, selectedObj, all_lists, last_edit_date):
+    def CleanList(self, selectedObj, all_lists, last_edit_date, category):
         all_lists.remove(selectedObj)
+        tableName=str(category+"Category")
+        clearQuery = "drop table "+tableName
+        DBconnectionDelete(clearQuery)
         print("Completed on " + str(last_edit_date.strftime("%x") + " " + last_edit_date.strftime("%X")))
         return all_lists
 

@@ -21,7 +21,7 @@ def listActionFunction(action, selectedObj, all_lists, last_edit_date):
                 break
             case '4':
                 print("\nCleaning "+selectedObj.get_title()+" list: "+str(selectedObj.todolist))
-                return selectedObj.CleanList(selectedObj,all_lists,last_edit_date)
+                return selectedObj.CleanList(selectedObj,all_lists,last_edit_date, selectedObj.get_category())
                 break
             case '5':
                 break
